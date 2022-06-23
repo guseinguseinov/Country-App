@@ -56,10 +56,10 @@ async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
         const response = await fetch(url);
         const data = await response.json();
         
-        // for await(let elem of data) {
+        // for (let elem of data) {
         //     addCountry(elem.flags.png, elem.name.common, elem.population, elem.region, elem.capital);
         // }
-        await data.forEach(function(elem) {
+        data.forEach(function(elem) {
             addCountry(elem.flags.png, elem.name.common, elem.population, elem.region, elem.capital);
         });
     }
@@ -71,6 +71,7 @@ async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
 select.addEventListener('change', function(event) {
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
+    history.pushState(null, null, `?region=${event.target.value}`);
 });
 
 getDataLocalStorage();
