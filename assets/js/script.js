@@ -3,20 +3,10 @@
 let themeBtn = document.querySelector('.theme-icon-btn');
 let container = document.querySelector('.container');
 let select = document.querySelector('select');
+// let backBtn = document.querySelector('.back-link');
 const currentUrl = new URL(location.href);
 const params = currentUrl.searchParams;
 
-// dark mode handler
-themeBtn.addEventListener('click', function () {
-    if (document.documentElement.dataset.theme == "dark") {
-        document.documentElement.dataset.theme = 'light';
-        localStorage.setItem('theme', 'light');
-    }
-    else {
-        document.documentElement.dataset.theme = 'dark';
-        localStorage.setItem('theme', 'dark');
-    }
-});
 
 const changeSelectOption = function(value) {
     container.innerHTML = '';
@@ -31,7 +21,7 @@ const changeSelectOption = function(value) {
 // adding counrties to html
 const addCountry = function(flag, countryName, population, region, capital) {
     let newLink = `
-    <a class="counrty-link" href="./details.html">
+    <a class="counrty-link" href="./details.html/${countryName}">
         <div class="counrty-div">
             <img src="${flag}" alt="flag" />
             <div class="counrty-info">
@@ -52,9 +42,13 @@ const getDataLocalStorage = function() {
     changeSelectOption(localStorage.getItem('userSelect'));
     if (params.get('region') !== null) {
         let region = params.get('region');
-        changeSelectOption(region);
         select.value = region;
-        localStorage.setItem('userSelect', region)
+        localStorage.setItem('userSelect', region);
+        changeSelectOption(region);
+    }else {
+        console.log('ok');  
+        localStorage.setItem('userSelect', 'All');
+        changeSelectOption();
     }
     
 } 
@@ -76,6 +70,18 @@ async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
     }
 }
 
+// dark mode handler
+themeBtn.addEventListener('click', function () {
+    if (document.documentElement.dataset.theme == "dark") {
+        document.documentElement.dataset.theme = 'light';
+        localStorage.setItem('theme', 'light');
+    }
+    else {
+        document.documentElement.dataset.theme = 'dark';
+        localStorage.setItem('theme', 'dark');
+    }
+});
+
 select.addEventListener('change', function(event) {
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
@@ -86,6 +92,11 @@ select.addEventListener('change', function(event) {
         history.pushState(null, null, `?region=${event.target.value}`);
     }
 });
+
+// backBtn.addEventListener('click', function(event) {
+//     event.preventDefault();
+//     // history.go(-1);
+// });
 
 getDataLocalStorage();
 
