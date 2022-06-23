@@ -2,7 +2,10 @@
 
 let themeBtn = document.querySelector('.theme-icon-btn');
 let container = document.querySelector('.container');
+let select = document.querySelector('select');
 
+
+// dark mode handler
 themeBtn.addEventListener('click', function () {
     if (document.documentElement.dataset.theme == "dark") {
         document.documentElement.dataset.theme = 'light';
@@ -14,30 +17,17 @@ themeBtn.addEventListener('click', function () {
     }
 });
 
-
-const getDataLocalStorage = function() {
-    document.documentElement.dataset.theme = localStorage.getItem('theme');
-} 
-
-getDataLocalStorage();
-
-async function getDataFromAPI() {
-    try {
-        const response = await fetch('https://restcountries.com/v3.1/all');
-        const data = await response.json();
-        
-        data.forEach(function(elem) {
-            console.log(elem);
-            addCountry(elem.flags.png, elem.name.common, elem.population, elem.region, elem.capital);
-        });
+const changeSelectOption = function(value) {
+    container.innerHTML = '';
+    if (value === 'All' || value === null) {
+        getDataFromAPI();
     }
-    catch (error) {
-        console.log('Something unexpexted huppened', error);
+    else {
+        getDataFromAPI(`https://restcountries.com/v3.1/region/` + value.toLowerCase());
     }
 }
 
-getDataFromAPI();
-
+// adding counrties to html
 const addCountry = function(flag, countryName, population, region, capital) {
     let newLink = `
     <a class="counrty-link" href="./details.html">
@@ -53,5 +43,34 @@ const addCountry = function(flag, countryName, population, region, capital) {
     </a>
     `
     container.innerHTML += newLink;
-
 }
+
+// getting data from local storage
+const getDataLocalStorage = function() {
+    document.documentElement.dataset.theme = localStorage.getItem('theme');
+    changeSelectOption(localStorage.getItem('userSelect'));
+} 
+
+async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // for await(let elem of data) {
+        //     addCountry(elem.flags.png, elem.name.common, elem.population, elem.region, elem.capital);
+        // }
+        await data.forEach(function(elem) {
+            addCountry(elem.flags.png, elem.name.common, elem.population, elem.region, elem.capital);
+        });
+    }
+    catch (error) {
+        console.log('Something unexpexted huppened', error);
+    }
+}
+
+select.addEventListener('change', function(event) {
+    changeSelectOption(event.target.value);
+    localStorage.setItem('userSelect', event.target.value);
+});
+
+getDataLocalStorage();
