@@ -3,14 +3,13 @@
 let themeBtn = document.querySelector('.theme-icon-btn');
 let container = document.querySelector('.container');
 let select = document.querySelector('select');
-// let backBtn = document.querySelector('.back-link');
 const currentUrl = new URL(location.href);
 const params = currentUrl.searchParams;
 
 
 const changeSelectOption = function(value) {
     container.innerHTML = '';
-    if (value === 'All' || value === null) {
+    if (value === 'All' || value === null || value === undefined) {
         getDataFromAPI();        
     }
     else {
@@ -39,14 +38,13 @@ const addCountry = function(flag, countryName, population, region, capital) {
 // getting data from local storage
 const getDataLocalStorage = function() {
     document.documentElement.dataset.theme = localStorage.getItem('theme');
-    changeSelectOption(localStorage.getItem('userSelect'));
     if (params.get('region') !== null) {
         let region = params.get('region');
         select.value = region;
         localStorage.setItem('userSelect', region);
         changeSelectOption(region);
-    }else {
-        console.log('ok');  
+    }
+    else if (params.get('region') === null) {
         localStorage.setItem('userSelect', 'All');
         changeSelectOption();
     }
@@ -93,10 +91,6 @@ select.addEventListener('change', function(event) {
     }
 });
 
-// backBtn.addEventListener('click', function(event) {
-//     event.preventDefault();
-//     // history.go(-1);
-// });
 
 getDataLocalStorage();
 
