@@ -80,15 +80,8 @@ img[alt='flag'] {
 }
 
 /* details  */
-.back-link {
-    display: inline-block;
-    
-    text-decoration: none;
-    border-radius: 6px;
-    margin: 80px;
-}
-
 .back-btn {
+    margin: 80px;
     border: 0;
     padding: 10px 40px;
     display: flex;
