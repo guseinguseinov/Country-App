@@ -3,7 +3,8 @@
 let themeBtn = document.querySelector('.theme-icon-btn');
 let container = document.querySelector('.container');
 let select = document.querySelector('select');
-
+const currentUrl = new URL(location.href);
+const params = currentUrl.searchParams;
 
 // dark mode handler
 themeBtn.addEventListener('click', function () {
@@ -20,7 +21,7 @@ themeBtn.addEventListener('click', function () {
 const changeSelectOption = function(value) {
     container.innerHTML = '';
     if (value === 'All' || value === null) {
-        getDataFromAPI();
+        getDataFromAPI();        
     }
     else {
         getDataFromAPI(`https://restcountries.com/v3.1/region/` + value.toLowerCase());
@@ -49,6 +50,13 @@ const addCountry = function(flag, countryName, population, region, capital) {
 const getDataLocalStorage = function() {
     document.documentElement.dataset.theme = localStorage.getItem('theme');
     changeSelectOption(localStorage.getItem('userSelect'));
+    if (params.get('region') !== null) {
+        let region = params.get('region');
+        changeSelectOption(region);
+        select.value = region;
+        localStorage.setItem('userSelect', region)
+    }
+    
 } 
 
 async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
@@ -71,7 +79,13 @@ async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
 select.addEventListener('change', function(event) {
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
-    history.pushState(null, null, `?region=${event.target.value}`);
+    if (event.target.value === "All") {
+        history.pushState(null, null, `/`);
+    }
+    else {
+        history.pushState(null, null, `?region=${event.target.value}`);
+    }
 });
 
 getDataLocalStorage();
+
