@@ -93,13 +93,12 @@ userForm.addEventListener('submit', function(event) {
 
 userInput.addEventListener('input', function(event) {
     container.innerHTML = "";
-    let params = getCurrentUrlParams();
     if (event.target.value.length !== 0){
         history.pushState(null, null, `?search=${event.target.value}`)
         getDataFromAPI(`https://restcountries.com/v3.1/name/` + event.target.value);  
     }
     else {
-        params.delete('search');
+        history.pushState(null, null, "?region=All");
         getDefaultData();
     }
 });
