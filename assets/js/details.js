@@ -22,7 +22,6 @@ const setCountryInfo = async function() {
         const response = await fetch(`https://restcountries.com/v3.1/name/${params.get('country').toLowerCase()}`);
         const data = await response.json();
         const counrtyArray = data[0];
-        console.log(counrtyArray)
         flag.src = counrtyArray.flags.png;
         counrtyName.textContent = counrtyArray.name.common;
 
@@ -53,7 +52,7 @@ const setCountryInfo = async function() {
         borderCountriesDiv.innerHTML = '';
         for (let borders in counrtyArray.borders) {
             let newHtml = `
-                <a class="border-country" href="./details.html?country=${counrtyArray.borders}">${counrtyArray.borders[borders]}</a>
+                <a class="border-country" href="./details.html?country=${counrtyArray.borders[borders]}">${counrtyArray.borders[borders]}</a>
             `
             borderCountriesDiv.innerHTML += newHtml;
         }

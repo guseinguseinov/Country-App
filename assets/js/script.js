@@ -80,7 +80,7 @@ select.addEventListener('change', function(event) {
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
     if (event.target.value === "All") {
-        history.pushState(null, null, `/?region=All`);
+        history.pushState(null, null, `?region=All`);
     }
     else {
         history.pushState(null, null, `?region=${event.target.value}`);
