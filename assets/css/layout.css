@@ -61,7 +61,7 @@ header {
 }
 
 .main-info {
-    width: 600px;
+    width: 600px;    
 }
 
 .info-div {
@@ -71,9 +71,15 @@ header {
     gap: 20px;
 }
 
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 60px 0; 
+}
 
-
-@media only screen and (max-width: 568px) {
+@media only screen and (max-width: 762px) {
     header {
         padding: 16px 30px;
     }

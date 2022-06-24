@@ -1,14 +1,16 @@
 'use strict';
 
-let themeBtn = document.querySelector('.theme-icon-btn');
 let container = document.querySelector('.container');
 let select = document.querySelector('select');
 let userForm = document.querySelector('.user-form');
 let userInput = document.querySelector('input[type="text"]');
 let backBtn = document.querySelector('.back-btn');
-const currentUrl = new URL(location.href);
-const params = currentUrl.searchParams;
 
+
+const getCurrentUrlParams = function() {
+    let currentUrl = new URL(location.href);
+    return currentUrl.searchParams;
+}
 
 const changeSelectOption = function(value) {
     container.innerHTML = '';
@@ -40,7 +42,7 @@ const addCountry = function(flag, countryName, population, region, capital) {
 
 // getting data from local storage
 const getDefaultData = function() {
-    document.documentElement.dataset.theme = localStorage.getItem('theme');
+    let params = getCurrentUrlParams();
     userInput.value = '';
     if (params.get('region') !== null) {
         let region = params.get('region');
@@ -73,24 +75,12 @@ async function getDataFromAPI(url = 'https://restcountries.com/v3.1/all') {
     }
 }
 
-// dark mode handler
-themeBtn.addEventListener('click', function () {
-    if (document.documentElement.dataset.theme == "dark") {
-        document.documentElement.dataset.theme = 'light';
-        localStorage.setItem('theme', 'light');
-    }
-    else {
-        document.documentElement.dataset.theme = 'dark';
-        localStorage.setItem('theme', 'dark');
-    }
-});
-
 select.addEventListener('change', function(event) {
     userInput.value = '';
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
     if (event.target.value === "All") {
-        history.pushState(null, null, `/`);
+        history.pushState(null, null, `/?region=All`);
     }
     else {
         history.pushState(null, null, `?region=${event.target.value}`);
@@ -103,11 +93,13 @@ userForm.addEventListener('submit', function(event) {
 
 userInput.addEventListener('input', function(event) {
     container.innerHTML = "";
+    let params = getCurrentUrlParams();
     if (event.target.value.length !== 0){
         history.pushState(null, null, `?search=${event.target.value}`)
         getDataFromAPI(`https://restcountries.com/v3.1/name/` + event.target.value);  
     }
     else {
+        params.delete('search');
         getDefaultData();
     }
 });
