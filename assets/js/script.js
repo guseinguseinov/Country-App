@@ -6,7 +6,6 @@ let userForm = document.querySelector('.user-form');
 let userInput = document.querySelector('input[type="text"]');
 let backBtn = document.querySelector('.back-btn');
 
-
 const getCurrentUrlParams = function() {
     let currentUrl = new URL(location.href);
     return currentUrl.searchParams;
@@ -37,7 +36,7 @@ const addCountry = function(flag, countryName, population, region, capital) {
         </div>
     </a>
     `
-    container.innerHTML += newLink;
+    container.insertAdjacentHTML('beforeend', newLink);
 }
 
 // getting data from local storage
@@ -93,15 +92,16 @@ userForm.addEventListener('submit', function(event) {
 
 
 userInput.addEventListener('keyup', function(event) {
-    container.innerHTML = "";
-    if (event.target.value.length !== 0){
-        history.pushState(null, null, `?search=${event.target.value}`)
-        getDataFromAPI(`https://restcountries.com/v3.1/name/` + event.target.value);  
-    }
-    else {
-        history.pushState(null, null, "?region=All");
-        getDefaultData();
-    }
+    let lowerValue = event.target.value.toLowerCase();
+    let countryName = document.querySelectorAll('.country-name');
+    countryName.forEach(elem => {
+        if (elem.textContent.toLowerCase().indexOf(lowerValue) !== -1){
+            elem.parentElement.parentElement.parentElement.style.display = 'block';
+        }
+        else {
+            elem.parentElement.parentElement.parentElement.style.display = 'none';
+        }
+    })
 });
 
 getDefaultData();
