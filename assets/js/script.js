@@ -91,7 +91,8 @@ userForm.addEventListener('submit', function(event) {
     event.preventDefault();
 });
 
-userInput.addEventListener('input', function(event) {
+
+userInput.addEventListener('keyup', function(event) {
     container.innerHTML = "";
     if (event.target.value.length !== 0){
         history.pushState(null, null, `?search=${event.target.value}`)
