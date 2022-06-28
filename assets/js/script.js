@@ -82,7 +82,7 @@ select.addEventListener('change', function(event) {
         let currentUrlOfPage = new URL(location.href);
         let newParams = currentUrlOfPage.search;
         console.log(newParams.split('?')[0]);
-        history.pushState(null, null, `/${newParams.split('?')[0]}`)
+        history.pushState(null, null, `${newParams.split('?')[0]}`)
         // newParams.delete('region');
         // history.pushState(null, null, `${newParams}`);
     }
