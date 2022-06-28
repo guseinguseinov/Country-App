@@ -122,7 +122,7 @@ h2 {
 .border-countries {
     display: flex;
     gap: 10px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .border-country {

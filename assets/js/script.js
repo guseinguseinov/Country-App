@@ -79,7 +79,12 @@ select.addEventListener('change', function(event) {
     changeSelectOption(event.target.value);
     localStorage.setItem('userSelect', event.target.value);
     if (event.target.value === "All") {
-        history.pushState(null, null, `?region=All`);
+        let currentUrlOfPage = new URL(location.href);
+        let newParams = currentUrlOfPage.search;
+        console.log(newParams.split('?')[0]);
+        history.pushState(null, null, `/${newParams.split('?')[0]}`)
+        // newParams.delete('region');
+        // history.pushState(null, null, `${newParams}`);
     }
     else {
         history.pushState(null, null, `?region=${event.target.value}`);
